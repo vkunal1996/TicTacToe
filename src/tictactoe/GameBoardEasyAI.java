@@ -1,6 +1,7 @@
 package tictactoe;
 
 import java.awt.EventQueue;
+import java.util.Random;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -19,24 +20,27 @@ import java.awt.FlowLayout;
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.Collections;
+
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import java.awt.Font;
 
-public class GameBoard extends JFrame {
+public class GameBoardEasyAI extends JFrame {
 
 	private JPanel contentPane;
 
 	/**
 	 * Launch the application.
 	 */
-	static GameBoard frame;
+	static GameBoardEasyAI frame;
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					frame = new GameBoard();
+					frame = new GameBoardEasyAI();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -51,6 +55,9 @@ public class GameBoard extends JFrame {
 	private static boolean row1=false,row2=false,row3=false;
 	private static boolean col1=false,col2=false,col3=false;
 	private static boolean di1=false,di2=false;
+	private static ArrayList<Integer> emptycells=new ArrayList<Integer>();
+	boolean win=false;
+	Random generator=new Random();
 	JLabel lb9 = new JLabel("");
 	JLabel lb8 = new JLabel("");
 	JLabel lb7 = new JLabel("");
@@ -80,6 +87,17 @@ public class GameBoard extends JFrame {
 	/**
 	 * Create the frame.
 	 */
+	public void initEmptyValues() {
+		emptycells.add(0,1);
+		emptycells.add(1,2);
+		emptycells.add(2,3);
+		emptycells.add(3,4);
+		emptycells.add(4,5);
+		emptycells.add(5,6);
+		emptycells.add(6,7);
+		emptycells.add(7,8);
+		emptycells.add(8,9);
+	}
 	public void initValues() {
 		 /*lb9 = new JLabel("");
 		 lb8 = new JLabel("");
@@ -103,9 +121,120 @@ public class GameBoard extends JFrame {
 		 turnOfX=true;
 		 turnOfY=false;
 		 val1="";val2="";val3="";val4="";val5="";val6="";val7="";val8="";val9="";
+		 //initEmptyValues();
 	}
-	public GameBoard() {
+	public void compTurn() {
+		System.out.println("Turns Done:"+countTurns );
+		if(countTurns>=5) {
+			System.out.println("First is Called");
+			win=checkWinner();
+		}
+		turnOfY=false;
+		turnOfX=true;
+		countTurns+=1;
+		int creatingindex=0;
+		int index;
+		emptycells=new ArrayList<Integer>();
+		if(countTurns<9) {
+		if(lb1.getText().isEmpty()==true) {
+			emptycells.add(creatingindex,1);
+			creatingindex+=1;
+		}
+	    if(lb2.getText().isEmpty()==true) {
+	    	emptycells.add(creatingindex,2);
+			creatingindex+=1;
+		}
+	    if(lb3.getText().isEmpty()==true) {
+	    	emptycells.add(creatingindex,3);
+			creatingindex+=1;
+		}
+	    if(lb4.getText().isEmpty()==true) {
+	    	emptycells.add(creatingindex,4);
+			creatingindex+=1;
+		}
+		if(lb5.getText().isEmpty()==true) {
+			emptycells.add(creatingindex,5);
+			creatingindex+=1;
+		}
+		if(lb6.getText().isEmpty()==true) {
+			emptycells.add(creatingindex,6);
+			creatingindex+=1;
+		}
+		if(lb7.getText().isEmpty()==true) {
+			emptycells.add(creatingindex,7);
+			creatingindex+=1;
+		}
+		if(lb8.getText().isEmpty()==true) {
+			emptycells.add(creatingindex,8);
+			creatingindex+=1;
+		}
+		if(lb9.getText().isEmpty()==true) {
+			emptycells.add(creatingindex,9);
+			creatingindex+=1;
+		}
+		}
+		System.out.println(emptycells);
+		int move;
+		if(countTurns<9) {
+		move=emptycells.get(generator.nextInt(emptycells.size()));
+		
+		//Collections.shuffle(emptycells);
+		System.out.println("Move Predicted: "+move);
+		System.out.println("Block "+move+" : O");
+		
+		switch(move) {
+		case 1:
+			lb1.setText("O");
+			val1=lb1.getText();
+			break;
+		case 2:
+			lb2.setText("O");
+			val2=lb2.getText();
+			break;
+		case 3:
+			lb3.setText("O");
+			val3=lb3.getText();
+			break;
+		case 4:
+			lb4.setText("O");
+			val4=lb4.getText();
+			break;
+		case 5:
+			lb5.setText("O");
+			val5=lb5.getText();
+			break;
+		case 6:
+			lb6.setText("O");
+			val6=lb6.getText();
+			break;
+		case 7:
+			lb7.setText("O");
+			val7=lb7.getText();
+			break;
+		case 8:
+			lb8.setText("O");
+			val8=lb8.getText();
+			break;
+		case 9:
+			lb9.setText("O");
+			val9=lb9.getText();
+			break;
+		}
+		index=emptycells.indexOf(move);
+		emptycells.remove(index);
+		System.out.println(emptycells);
+		System.out.println("Turns Done "+countTurns);
+		}
+		if(countTurns>=5) {
+			System.out.println("Second is called");
+			win=checkWinner();
+			System.out.println(win);
+		}
+		
+	}
+	public GameBoardEasyAI() {
 		setResizable(false);
+		//initEmptyValues();
 		System.out.print("New Game Started\n");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("Tic tac Toe");
@@ -140,7 +269,7 @@ public class GameBoard extends JFrame {
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
-				frame=new GameBoard();
+				frame=new GameBoardEasyAI();
 				initValues();
 				frame.setVisible(true);
 			}
@@ -222,18 +351,18 @@ public class GameBoard extends JFrame {
 					lb9.setText("X");
 					turnOfX=false;
 					turnOfY=true;
+					val9=lb9.getText();
+					System.out.println("Block 9 : "+val9);
+					countTurns+=1;
+					if(countTurns>=5) {
+						win=checkWinner();
+					}
+					if(win==false) {
+					compTurn();
+					}
 				}
-				else if(turnOfY) {
-					lb9.setText("O");
-					turnOfX=true;
-					turnOfY=false;
-				}
-				val9=lb9.getText();
-				System.out.println("Block 9 : "+val9);
-				countTurns+=1;
-				if(countTurns>=5) {
-					checkWinner();
-				}
+				
+				
 			}
 			}
 		});
@@ -264,18 +393,18 @@ public class GameBoard extends JFrame {
 					lb8.setText("X");
 					turnOfX=false;
 					turnOfY=true;
+					val8=lb8.getText();
+					System.out.println("Block 8 : "+val8);
+					countTurns+=1;
+					if(countTurns>=5) {
+						win=checkWinner();
+					}
+					if(win==false) {
+					compTurn();
+					}
 				}
-				else if(turnOfY) {
-					lb8.setText("O");
-					turnOfX=true;
-					turnOfY=false;
-				}
-				val8=lb8.getText();
-				System.out.println("Block 8 : "+val8);
-				countTurns+=1;
-				if(countTurns>=5) {
-					checkWinner();
-				}
+			
+				
 			}
 			}
 		});
@@ -306,18 +435,18 @@ public class GameBoard extends JFrame {
 					lb7.setText("X");
 					turnOfX=false;
 					turnOfY=true;
+					val7=lb7.getText();
+					System.out.println("Block 7 : "+val7);
+					countTurns+=1;
+					if(countTurns>=5) {
+						win=checkWinner();
+					}
+					if(win==false) {
+					compTurn();
+					}
 				}
-				else if(turnOfY) {
-					lb7.setText("O");
-					turnOfX=true;
-					turnOfY=false;
-				}
-				val7=lb7.getText();
-				System.out.println("Block 7 : "+val7);
-				countTurns+=1;
-				if(countTurns>=5) {
-					checkWinner();
-				}
+			
+			
 			}
 			}
 		});
@@ -348,18 +477,18 @@ public class GameBoard extends JFrame {
 					lb6.setText("X");
 					turnOfX=false;
 					turnOfY=true;
+					val6=lb6.getText();
+					System.out.println("Block 6 : "+val6);
+					countTurns+=1;
+					if(countTurns>=5) {
+						win=checkWinner();
+					}
+					if(win==false) {
+					compTurn();
+					}
 				}
-				else if(turnOfY) {
-					lb6.setText("O");
-					turnOfX=true;
-					turnOfY=false;
-				}
-				val6=lb6.getText();
-				System.out.println("Block 6 : "+val6);
-				countTurns+=1;
-				if(countTurns>=5) {
-					checkWinner();
-				}
+			
+			
 			}
 			}
 		});
@@ -390,18 +519,18 @@ public class GameBoard extends JFrame {
 					lb5.setText("X");
 					turnOfX=false;
 					turnOfY=true;
+					val5=lb5.getText();
+					System.out.println("Block 5 : "+val5);
+					countTurns+=1;
+					if(countTurns>=5) {
+						win=checkWinner();
+					}
+					if(win==false) {
+					compTurn();
+					}
 				}
-				else if(turnOfY) {
-					lb5.setText("O");
-					turnOfX=true;
-					turnOfY=false;
-				}
-				val5=lb5.getText();
-				System.out.println("Block 5 : "+val5);
-				countTurns+=1;
-				if(countTurns>=5) {
-					checkWinner();
-				}
+		
+				
 			}
 			}
 		});
@@ -432,18 +561,18 @@ public class GameBoard extends JFrame {
 					lb4.setText("X");
 					turnOfX=false;
 					turnOfY=true;
+					val4=lb4.getText();
+					System.out.println("Block 4 : "+val4);
+					countTurns+=1;
+					if(countTurns>=5) {
+						win=checkWinner();
+					}
+					if(win==false) {
+					compTurn();
+					}
 				}
-				else if(turnOfY) {
-					lb4.setText("O");
-					turnOfX=true;
-					turnOfY=false;
-				}
-				val4=lb4.getText();
-				System.out.println("Block 4 : "+val4);
-				countTurns+=1;
-				if(countTurns>=5) {
-					checkWinner();
-				}
+			
+				
 			}
 			}
 		});
@@ -474,18 +603,18 @@ public class GameBoard extends JFrame {
 					lb3.setText("X");
 					turnOfX=false;
 					turnOfY=true;
+					val3=lb3.getText();
+					System.out.println("Block 3 : "+val3);
+					countTurns+=1;
+					if(countTurns>=5) {
+						win=checkWinner();
+					}
+					if(win==false) {
+					compTurn();
+					}
 				}
-				else if(turnOfY) {
-					lb3.setText("O");
-					turnOfX=true;
-					turnOfY=false;
-				}
-				val3=lb3.getText();
-				System.out.println("Block 3 : "+val3);
-				countTurns+=1;
-				if(countTurns>=5) {
-					checkWinner();
-				}
+		
+				
 			}
 			}
 		});
@@ -516,18 +645,18 @@ public class GameBoard extends JFrame {
 					lb2.setText("X");
 					turnOfX=false;
 					turnOfY=true;
+					val2=lb2.getText();
+					System.out.println("Block 2 : "+val2);
+					countTurns+=1;
+					if(countTurns>=5) {
+						win=checkWinner();
+					}
+					if(win==false) {
+					compTurn();
+					}
 				}
-				else if(turnOfY) {
-					lb2.setText("O");
-					turnOfX=true;
-					turnOfY=false;
-				}
-				val2=lb2.getText();
-				System.out.println("Block 2 : "+val2);
-				countTurns+=1;
-				if(countTurns>=5) {
-					checkWinner();
-				}
+		
+				
 			}
 			}
 		});
@@ -558,18 +687,19 @@ public class GameBoard extends JFrame {
 					lb1.setText("X");
 					turnOfX=false;
 					turnOfY=true;
+					val1=lb1.getText();
+					System.out.println("Block 1 : "+val1);
+					countTurns+=1;
+					if(countTurns>=5) {
+						win=checkWinner();
+					}
+					if(win==false) {
+					compTurn();
+					}
+
 				}
-				else if(turnOfY) {
-					lb1.setText("O");
-					turnOfX=true;
-					turnOfY=false;
-				}
-				val1=lb1.getText();
-				System.out.println("Block 1 : "+val1);
-				countTurns+=1;
-				if(countTurns>=5) {
-					checkWinner();
-				}
+			
+				
 			}
 			}
 		});
@@ -594,24 +724,28 @@ public class GameBoard extends JFrame {
 		panel.setLayout(gl_panel);
 		contentPane.setLayout(gl_contentPane);
 	}
-	public void checkWinner() {
+	public boolean checkWinner() {
 		String winner=null;
+		boolean win=false;
 			/*
 			 * Checking for Horizontal Winning Cases*/
 			if(val1.equals(val2)&& val2.equals(val3)&&(val1!=""&&val2!=""&&val3!="")) {
 				winner=val1;
 				System.out.println("Row1 is true");
 				Winner(winner);
+				win=true;
 			}
 			else if(val4.equals(val5)&&val5.equals(val6)&&(val4!=""&&val5!=""&&val6!="")) {
 				winner=val4;
 				System.out.println("Row2 is true");
 				Winner(winner);
+				win=true;
 			}
 			else if (val7.equals(val8)&&val8.equals(val9)&&(val7!=""&&val8!=""&&val9!="")) {
 				winner=val7;
 				System.out.println("Row3 is true");
 				Winner(winner);
+				win=true;
 			}
 			/*
 			 * Checking for vertical Winning Cases*/
@@ -619,16 +753,19 @@ public class GameBoard extends JFrame {
 				winner=val1;
 				System.out.println("Col1 is true");
 				Winner(winner);
+				win=true;
 			}
 			else if(val2.equals(val5)&&val5.equals(val8)&&(val2!=""&&val5!=""&&val8!="")) {
 				winner=val2;
 				System.out.println("Col2 is true");
 				Winner(winner);
+				win=true;
 			}
 			else if(val3.equals(val6)&&val6.equals(val9)&&(val3!=""&&val6!=""&&val9!="")) {
 				winner=val3;
 				System.out.println("Col3 is true");
 				Winner(winner);
+				win=true;
 			}
 			/*
 			 * Checking for diagonal winner*/
@@ -636,10 +773,14 @@ public class GameBoard extends JFrame {
 				winner=val5;
 				System.out.println("Di is true");
 				Winner(winner);
+				win=true;
 			}
-			if(countTurns==9) {
+			else if(countTurns==9) {
 				Winner(winner);
+				win=false;
 			}
+			return win;
+			
 		
 	}
 	public void Winner(String winner) {
@@ -647,6 +788,12 @@ public class GameBoard extends JFrame {
 			winLabel.setText("Game Draw!");
 		}
 		else {
+			if(winner.equals("X")) {
+				winner="You";
+			}
+			else if(winner.equals("O")) {
+				winner="Comp";
+			}
 			winLabel.setText("  "+winner+" won!");
 		}
 		disableBoard();
